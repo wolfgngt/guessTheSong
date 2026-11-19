@@ -66,9 +66,9 @@ filePicker.addEventListener("change", (event) => {
 
 guessForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  const guess = guessInput.value;
+  const guess = guessInput.value.toLowerCase().trim();
 
-  if (guess === currentSong.title) {
+  if (guess === currentSong.title.toLowerCase().trim()) {
     revealSong(true);
     toggleSongButtonVisibility();
     return;
@@ -80,6 +80,8 @@ guessForm.addEventListener("submit", (event) => {
     revealSong(false);
     toggleSongButtonVisibility();
   }
+
+  guessInput.value = "";
 });
 
 nextSongButton.addEventListener("click", () => {
@@ -88,6 +90,8 @@ nextSongButton.addEventListener("click", () => {
 });
 
 
+//TODO : nettoyage du guess (espaces, typos, accents)
+//TODO : ajouter un bouton pour skip
 //TODO : scoring? calculer + incrémenter du score
 //TODO : multi? assigner le score a une personne (menu déroulant truc du genre)
 //TODO : multi : attribution des points (choix joueur) uniquement si GG
