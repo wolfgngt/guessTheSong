@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devine la chanson</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="container" aria-live="polite">
+      <section id="welcome-screen" class="screen is-active" aria-labelledby="welcome-title">
+        <p class="eyebrow">Blind test paroles</p>
+        <h1 id="welcome-title">🎵 Devine la chanson</h1>
+        <p class="screen-text">Reconnais les titres grâce aux paroles, une chanson à la fois.</p>
+
+        <label class="file-picker" for="file-picker">
+          <span>Choisir un fichier de chansons</span>
+          <input type="file" id="file-picker" accept=".csv">
+        </label>
+
+        <button type="button" id="start-button" class="primary-button">Commencer</button>
+      </section>
+
+      <section id="players-screen" class="screen" hidden aria-labelledby="players-title">
+        <p class="eyebrow">Avant de jouer</p>
+        <h2 id="players-title">Combien de joueurs jouent à cette partie&nbsp;?</h2>
+        <p class="screen-text">Choisissez le nombre de participants.</p>
+
+        <form id="players-form">
+          <fieldset class="player-options">
+            <legend class="visually-hidden">Nombre de joueurs</legend>
+
+            <input type="radio" name="player-count" id="players-1" value="1" required>
+            <label for="players-1" class="player-bubble">1</label>
+
+            <input type="radio" name="player-count" id="players-2" value="2">
+            <label for="players-2" class="player-bubble">2</label>
+
+            <input type="radio" name="player-count" id="players-3" value="3">
+            <label for="players-3" class="player-bubble">3</label>
+
+            <input type="radio" name="player-count" id="players-4" value="4">
+            <label for="players-4" class="player-bubble">4</label>
+
+            <input type="radio" name="player-count" id="players-5" value="5">
+            <label for="players-5" class="player-bubble">5</label>
+
+            <input type="radio" name="player-count" id="players-6" value="6">
+            <label for="players-6" class="player-bubble">6</label>
+          </fieldset>
+
+          <button type="submit" class="primary-button">Continuer</button>
+        </form>
+      </section>
+
+      <section id="ready-screen" class="screen" hidden aria-labelledby="ready-title">
+        <p class="eyebrow">La partie est prête</p>
+        <h2 id="ready-title">Êtes-vous prêt&nbsp;?</h2>
+        <p class="screen-text">La première chanson arrive dès que vous le dites.</p>
+
+        <button type="button" id="ready-button" class="primary-button">Oui&nbsp;!</button>
+      </section>
+
+      <section id="game-screen" class="screen" hidden aria-labelledby="game-title">
+        <p class="eyebrow">À vous de jouer</p>
+        <h2 id="game-title">Quelle est cette chanson&nbsp;?</h2>
+
+        <ul id="lyrics-list" class="lyrics"></ul>
+
+        <form id="guess-form" autocomplete="off">
+          <label class="visually-hidden" for="guess-input">Votre réponse</label>
+          <input type="text" id="guess-input" placeholder="Titre de la chanson…" required>
+          <button type="submit">Valider</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="csvParser.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+      const screens = document.querySelectorAll(".screen");
+
+      function showScreen(screenId) {
+        screens.forEach((screen) => {
+          const isActive = screen.id === screenId;
+          screen.hidden = !isActive;
+          screen.classList.toggle("is-active", isActive);
+        });
+      }
+
+      document.querySelector("#start-button").addEventListener("click", () => {
+        showScreen("players-screen");
+      });
+
+      document.querySelector("#players-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (event.currentTarget.checkValidity()) {
+          showScreen("ready-screen");
+        }
+      });
+
+      document.querySelector("#ready-button").addEventListener("click", () => {
+        showScreen("game-screen");
+        document.querySelector("#guess-input").focus();
+      });
+    </script>
+  </body>
+</html>
